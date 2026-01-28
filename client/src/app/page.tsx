@@ -1,10 +1,14 @@
-import Image from "next/image";
+import Link from 'next/link'
+
+import { buttonVariants } from '@/shared/components/ui/button'
 
 export default function Home() {
   return (
-    <div>Home page</div>
-
-
-
-  );
+    <div className='space-y-5 text-center'>
+      <h1 className='text-4xl font-bold'>Главная страница</h1>
+      <Link href='/auth/login' className={buttonVariants()}>
+        Login
+      </Link>
+    </div>
+  )
 }
