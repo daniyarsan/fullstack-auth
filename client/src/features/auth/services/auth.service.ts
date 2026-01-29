@@ -20,6 +20,10 @@ class AuthService {
     })
   }
 
+  public async oauthByProvider(provider: 'google' | 'yandex') {
+    return await api.get<{ uri: string }>(`auth/oauth/connect/${provider}`)
+  }
+
   public async logout() {
     return await api.post('/auth/logout')
   }
