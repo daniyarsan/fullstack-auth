@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { AuthWrapper } from '@/features/auth/components/AuthWrapper'
+import { useRegisterMutation } from '@/features/auth/hooks'
 import { RegisterSchema, TypeRegisterSchema } from '@/features/auth/schemas'
 
 import {
@@ -35,9 +36,11 @@ export function RegisterForm() {
     }
   })
 
+  const { register, isLoadingRegister } = useRegisterMutation()
+
   const onsubmit = async (values: TypeRegisterSchema) => {
     if (recaptchaValue) {
-      console.log(values)
+      register({ values, recaptcha: recaptchaValue })
     } else {
       toast.error('Please complete recaptha')
     }
@@ -63,7 +66,11 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder='John' {...field} />
+                  <Input
+                    placeholder='John'
+                    {...field}
+                    disabled={isLoadingRegister}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -81,6 +88,7 @@ export function RegisterForm() {
                     placeholder='john@example.com'
                     type='email'
                     {...field}
+                    disabled={isLoadingRegister}
                   />
                 </FormControl>
                 <FormMessage />
@@ -95,7 +103,12 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder='******' type='password' {...field} />
+                  <Input
+                    placeholder='******'
+                    type='password'
+                    {...field}
+                    disabled={isLoadingRegister}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -109,7 +122,12 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel>Repeat Password</FormLabel>
                 <FormControl>
-                  <Input placeholder='******' type='password' {...field} />
+                  <Input
+                    placeholder='******'
+                    type='password'
+                    {...field}
+                    disabled={isLoadingRegister}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -123,7 +141,9 @@ export function RegisterForm() {
               theme={theme === 'light' ? 'light' : 'dark'}
             />
           </div>
-          <Button type='submit'>Create Account</Button>
+          <Button type='submit' disabled={isLoadingRegister}>
+            Create Account
+          </Button>
         </form>
       </Form>
     </AuthWrapper>
