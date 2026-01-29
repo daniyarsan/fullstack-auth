@@ -9,8 +9,11 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { AuthWrapper } from '@/features/auth/components/AuthWrapper'
-import { useLoginMutation } from '@/features/auth/hooks'
-import { LoginSchema, TypeLoginSchema } from '@/features/auth/schemas'
+import { useNewPasswordMutation } from '@/features/auth/hooks'
+import {
+  NewPasswordSchema,
+  TypeNewPasswordSchema
+} from '@/features/auth/schemas'
 
 import {
   Button,
@@ -23,60 +26,39 @@ import {
   Input
 } from '@/shared/components/ui'
 
-export function LoginForm() {
+export function NewPasswordForm() {
   const { theme } = useTheme()
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
 
-  const form = useForm<TypeLoginSchema>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<TypeNewPasswordSchema>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      email: '',
       password: ''
     }
   })
 
-  const { login, isLoadingLogin } = useLoginMutation()
+  const { newPassword, isLoadingNewPassword } = useNewPasswordMutation()
 
-  const onsubmit = async (values: TypeLoginSchema) => {
+  const onsubmit = async (values: TypeNewPasswordSchema) => {
     if (recaptchaValue) {
-      login({ values, recaptcha: recaptchaValue })
+      newPassword({ values, recaptcha: recaptchaValue })
     } else {
-      toast.error('Please complete recaptha')
+      toast.error('Please complete reCaptcha')
     }
   }
 
   return (
     <AuthWrapper
-      heading='Login'
-      description='Please enter login and password enter'
-      backButtonHref='/auth/register'
-      backButtonLabel='Register'
-      isShowSocial
+      heading='New password'
+      description='Please enter new password'
+      backButtonHref='/auth/login'
+      backButtonLabel='Login'
     >
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onsubmit)}
           className='grid gap-2 space-y-2'
         >
-          <FormField
-            control={form.control}
-            name='email'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='john@example.com'
-                    type='email'
-                    {...field}
-                    disabled={isLoadingLogin}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <FormField
             control={form.control}
             name='password'
@@ -94,7 +76,7 @@ export function LoginForm() {
                     placeholder='******'
                     type='password'
                     {...field}
-                    disabled={isLoadingLogin}
+                    disabled={isLoadingNewPassword}
                   />
                 </FormControl>
                 <FormMessage />
@@ -110,7 +92,7 @@ export function LoginForm() {
             />
           </div>
 
-          <Button type='submit' disabled={isLoadingLogin}>
+          <Button type='submit' disabled={isLoadingNewPassword}>
             Login
           </Button>
         </form>
